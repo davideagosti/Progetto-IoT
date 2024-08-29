@@ -1,0 +1,14 @@
+[Unit]
+Description=Avvio nginx con pagina index di prova
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/Desktop/webServer/ProvaIndex.py
+WorkingDirectory=/home/pi/Desktop/webServer/
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=checkUptime
+Restart=always
+User=root
+[Install]
+WantedBy=multi-user.target

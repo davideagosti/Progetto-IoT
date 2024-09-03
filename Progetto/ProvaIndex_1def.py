@@ -3,11 +3,12 @@ from database import mysql
 #from DB_Operations import get_data
 import mysql.connector
 
+
 myDb = mysql.connector.connect(
-    host="raspberrypi",
+    host="192.168.137.147",   #raspberrypi
     user="pythonUser",
     password="pythonPWD",
-    database="tuoDb"
+    database="tuoDB"
 )
 
 
@@ -27,7 +28,7 @@ else:
         #else:
          #   print("Non ci sono Tabelle")
 
-sqlVis = "SELECT * FROM records"
+sqlVis = "SELECT * FROM Records"
 
 def get_data():# funzione che mi restituisce le righe del db da mettere in tabella nella pagina index
     myCursor.execute(sqlVis)
@@ -36,7 +37,13 @@ def get_data():# funzione che mi restituisce le righe del db da mettere in tabel
 
 app = Flask(__name__)#----------------------------------------------------------------------------
 
+print(f"Connesso al database: {myDb.database}")
+print(f"Esecuzione query: {sqlVis}")
 
+myCursor.execute("SHOW TABLES;")
+print(myCursor.fetchall())
+
+myDb.autocommit = True
 
 @app.route("/provaindex")# funzione che abilita una root cioè una pagina html dove visualizzare i dati del db nel rasp
 def provaindex():
@@ -44,5 +51,12 @@ def provaindex():
     row = get_data()
     return render_template("indexprovaindex_1.html", righe = row)
 
+@app.route("/prova")# funzione che abilita una root cioè una pagina html dove visualizzare i dati del db nel rasp
+def prova():
+
+    row = get_data()
+    return render_template("prov.html")
+
+    
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True, host='0.0.0.0', port=8000)
